@@ -6,7 +6,8 @@ from django.db import IntegrityError, transaction
 
 def set_default_status(apps, schema_editor):
     # Статусы - перечень, который будет вставлен в БД
-    statuses = {10:'К выполнению', 20:'В работе', 30:'Готово'}
+    statuses = {None:'К выполнению', 1:'В работе', 2:'Готово'}
+    # statuses = ['К выполнению', 'В работе', 'Готово']
     # Запрашиваем модель - класс State из аппликейшена tmapp
     State = apps.get_model('tmapp', 'State')
     
@@ -14,9 +15,15 @@ def set_default_status(apps, schema_editor):
     for key,value in statuses.items():
         try:
             with transaction.atomic():
-                State.objects.create(state_title=value, weight=key)
+                State.objects.create(state_title=value, parent_id=key)
         except IntegrityError:
             pass
+    # for element in statuses:
+    #     try:
+    #         with transaction.atomic():
+    #             State.objects.create(state_title=element)
+    #     except IntegrityError:
+    #         pass 
 
 def delete_default_status(apps, schema_editor):
 

@@ -1,5 +1,5 @@
 from django.contrib import admin
-from tmapp.models import State, Project, Sprint, Task, Status
+from tmapp.models import State, Project, Sprint, Task
 from simple_history.admin import SimpleHistoryAdmin
 
 
@@ -19,13 +19,13 @@ from simple_history.admin import SimpleHistoryAdmin
 
 
 class StateAdmin(SimpleHistoryAdmin):
-    list_display = ['state_title', 'weight']
-    history_list_display = ['state_title', 'weight']
-    # state = State.objects.create(name="Тестирование")
-
-class StatusAdmin(Status):
     list_display = ['state_title']
     history_list_display = ['state_title']
+    # state = State.objects.create(state_title="Тестирование")
+
+# class StatusAdmin(Status):
+#     list_display = ['state_title']
+#     history_list_display = ['state_title']
     # state = State.objects.create(name="Тестирование")
 
 class ProjectAdmin(SimpleHistoryAdmin):
@@ -52,4 +52,4 @@ admin.site.register(State, StateAdmin)
 admin.site.register(Project, ProjectAdmin)
 admin.site.register(Sprint, SprintAdmin)
 admin.site.register(Task, TaskAdmin)
-admin.site.register(Status)
+# admin.site.register(Status)

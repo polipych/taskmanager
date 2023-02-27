@@ -11,27 +11,28 @@ def get_default_task_status():
 class State(models.Model):
 
     state_title = models.CharField(max_length=200, null=False, unique=True)
-    weight = models.IntegerField()
+    # weight = models.IntegerField(unique=True)
+    parent = models.ForeignKey('self', on_delete=models.PROTECT, null=True, blank=True, default=None)
     history = HistoricalRecords()
 
     class Meta:
-        ordering = ['-weight',]
+        ordering = ['-parent__id',]
 
     def __str__(self):
         return self.state_title
 
-class Status(models.Model):
+# class Status(models.Model):
 
-    state_title = models.CharField(max_length=200, null=False, unique=True)
-    # weight = models.IntegerField()
-    parent = models.ForeignKey('self', on_delete=models.PROTECT, null=True, blank=False, default=None, unique=True)
-    history = HistoricalRecords()
+#     state_title = models.CharField(max_length=200, null=False)
+#     # weight = models.IntegerField()
+#     parent = models.ForeignKey('self', on_delete=models.PROTECT, null=True, blank=True, default=None)
+#     history = HistoricalRecords()
 
     # class Meta:
     #     ordering = ['-weight',]
 
-    def __str__(self):
-        return self.state_title
+    # def __str__(self):
+    #     return self.state_title
 
 class Project(models.Model):
 
@@ -115,10 +116,10 @@ class Task(models.Model):
         null=True,
         verbose_name='Спринт',
     )
-    keyid = models.CharField(max_length=20, unique=True, editable=False)
+    keyid = models.CharField(max_length=20, unique=True, editable=False, verbose_name='ID')
     subject = models.CharField(max_length=160, blank=False, null=False, verbose_name='Задача')
     body = models.TextField(blank=True, null=True, verbose_name='Описание')
-    state = models.ForeignKey('State', on_delete=models.PROTECT, default=get_default_task_status)
+    state = models.ForeignKey('State', on_delete=models.PROTECT, default=get_default_task_status, verbose_name='Статус')
     task_start = models.DateTimeField(
         default=datetime.now(),
         verbose_name='Дата создания'
@@ -127,8 +128,8 @@ class Task(models.Model):
         default=datetime.now(),
         verbose_name='Дата обновления'
     )
-    author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='authors', editable=False)
-    executor = models.ForeignKey(User, on_delete=models.CASCADE, related_name='executors')
+    author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='authors', editable=False, verbose_name='Автор')
+    executor = models.ForeignKey(User, on_delete=models.CASCADE, related_name='executors', verbose_name='Исполнитель')
     history = HistoricalRecords()
     
     def __str__(self):
