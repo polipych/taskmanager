@@ -1,3 +1,4 @@
+from django.contrib.auth.models import AbstractUser
 from django.db import models
 from datetime import datetime, timedelta
 from simple_history.models import HistoricalRecords
@@ -7,6 +8,12 @@ from django.contrib.auth.models import User
 def get_default_task_status():
     """ get a default value for action status; create new status if not available """
     return State.objects.all().last()
+
+class User(AbstractUser):
+    bio = models.CharField(max_length=160, null=True, blank=True)
+    birthday = models.DateField(null=True, blank=True)
+    def __str__(self):
+        return self.username
 
 class State(models.Model):
 
@@ -129,7 +136,7 @@ class Task(models.Model):
         verbose_name='Дата обновления'
     )
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='authors', editable=False, verbose_name='Автор')
-    executor = models.ForeignKey(User, on_delete=models.CASCADE, related_name='executors', verbose_name='Исполнитель')
+    executor = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True, related_name='executors', verbose_name='Исполнитель')
     history = HistoricalRecords()
     
     def __str__(self):
