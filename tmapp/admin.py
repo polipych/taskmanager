@@ -1,5 +1,6 @@
 from django.contrib import admin
-from tmapp.models import State, Project, Sprint, Task
+from django.contrib.auth.admin import UserAdmin
+from tmapp.models import State, Project, Sprint, Task, User
 from simple_history.admin import SimpleHistoryAdmin
 from django.core.mail import send_mail
 
@@ -47,11 +48,11 @@ class TaskAdmin(SimpleHistoryAdmin):
     def save_model(self, request, obj, form, change):
         if obj.pk is None:
             obj.author = request.user
-            # send_mail('Django mail', 'This e-mail was sent with Django.', 'tmapp <polipych@yandex.ru>', [obj.author.email], fail_silently=False)
         super(TaskAdmin, self).save_model(request, obj, form, change)
 
 admin.site.register(State, StateAdmin)
 admin.site.register(Project, ProjectAdmin)
 admin.site.register(Sprint, SprintAdmin)
 admin.site.register(Task, TaskAdmin)
+admin.site.register(User, UserAdmin)
 # admin.site.register(Status)

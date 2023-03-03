@@ -151,4 +151,4 @@ EMAIL_PORT = env('EMAIL_PORT')
 EMAIL_USE_SSL = env('EMAIL_USE_SSL')
 
 # Auth user settings
-AUTH_USER_MODEL = 'users.User'
+AUTH_USER_MODEL = 'tmapp.User'

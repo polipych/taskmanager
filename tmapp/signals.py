@@ -31,9 +31,13 @@ def on_change(sender, instance: Task, **kwargs):
     if user:
         # pass
 
-        if instance.id is None and instance.executor: # new object will be created
+        if instance.id is None and instance.executor is None:
+            send_mail(f'[TMAPP] Создана задача: {instance.subject}',
+                    f'Необходимо назначить испольнителя.',
+                    'tmapp <polipych@yandex.ru>', [instance.author.email], fail_silently=False)
+        elif instance.id is None and instance.executor: # new object will be created
             send_mail(f'[TMAPP] Назначение задачи: {instance.subject}',
-                    f'{instance.executor.username} Вам назначена задача {instance.keyid}',
+                    f'{instance.executor.username} Вам назначена задача {instance.subject}.',
                     'tmapp <polipych@yandex.ru>', [instance.executor.email], fail_silently=False)
             # pass # write your code here
         else:

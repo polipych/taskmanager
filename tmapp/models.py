@@ -10,8 +10,17 @@ def get_default_task_status():
     return State.objects.all().last()
 
 class User(AbstractUser):
-    bio = models.CharField(max_length=160, null=True, blank=True)
-    birthday = models.DateField(null=True, blank=True)
+    email = models.EmailField(null=False, blank=False, unique=True)
+    
+    def get_readonly_fields(self, request, obj=None):
+        # We make the field uneditable if the user is not a superuser
+        return super().get_readonly_fields(request) if request.user.is_superuser else ('is_superuser',)
+ 
+    def get_queryset(self, request):
+        qs = super().get_queryset(request)
+        # and also exclude all superusers from queryset if the user is not a superuser
+        return qs if request.user.is_superuser else qs.exclude(is_superuser=True)
+
     def __str__(self):
         return self.username
 
@@ -136,7 +145,7 @@ class Task(models.Model):
         verbose_name='Дата обновления'
     )
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='authors', editable=False, verbose_name='Автор')
-    executor = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True, related_name='executors', verbose_name='Исполнитель')
+    executor = models.ForeignKey(User, on_delete=models.CASCADE, limit_choices_to={'is_superuser': False}, null=True, blank=True, related_name='executors', verbose_name='Исполнитель')
     history = HistoricalRecords()
     
     def __str__(self):
