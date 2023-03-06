@@ -2,24 +2,25 @@ from django.contrib.auth.models import AbstractUser
 from django.db import models
 from datetime import datetime, timedelta
 from simple_history.models import HistoricalRecords
-from django.contrib.auth.models import User
+# from django.contrib.auth.models import 
+from django.conf import settings
 
 
 def get_default_task_status():
     """ get a default value for action status; create new status if not available """
-    return State.objects.all().last()
+    return State.objects.all().first()
 
 class User(AbstractUser):
     email = models.EmailField(null=False, blank=False, unique=True)
     
-    def get_readonly_fields(self, request, obj=None):
-        # We make the field uneditable if the user is not a superuser
-        return super().get_readonly_fields(request) if request.user.is_superuser else ('is_superuser',)
+    # def get_readonly_fields(self, request, obj=None):
+    #     # We make the field uneditable if the user is not a superuser
+    #     return super().get_readonly_fields(request) if request.user.is_superuser else ('is_superuser',)
  
-    def get_queryset(self, request):
-        qs = super().get_queryset(request)
-        # and also exclude all superusers from queryset if the user is not a superuser
-        return qs if request.user.is_superuser else qs.exclude(is_superuser=True)
+    # def get_queryset(self, request):
+    #     qs = super().get_queryset(request)
+    #     # and also exclude all superusers from queryset if the user is not a superuser
+    #     return qs if request.user.is_superuser else qs.exclude(is_superuser=True)
 
     def __str__(self):
         return self.username
@@ -115,7 +116,6 @@ class Sprint(models.Model):
             self.sprint_end = self.sprint_start + timedelta(weeks=4)
         return super().save(*args, **kwargs)
 
-
 class Task(models.Model):
 
     project = models.ForeignKey(
@@ -144,8 +144,8 @@ class Task(models.Model):
         default=datetime.now(),
         verbose_name='Дата обновления'
     )
-    author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='authors', editable=False, verbose_name='Автор')
-    executor = models.ForeignKey(User, on_delete=models.CASCADE, limit_choices_to={'is_superuser': False}, null=True, blank=True, related_name='executors', verbose_name='Исполнитель')
+    author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='authors', editable=False, verbose_name='Автор')
+    executor = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, limit_choices_to={'is_superuser': False}, null=True, blank=True, related_name='executors', verbose_name='Исполнитель')
     history = HistoricalRecords()
     
     def __str__(self):
