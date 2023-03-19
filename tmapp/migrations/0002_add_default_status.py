@@ -6,13 +6,13 @@ from django.db import IntegrityError, transaction
 
 def set_default_status(apps, schema_editor):
     # Статусы - перечень, который будет вставлен в БД
-    statuses = {None:'К выполнению', 1:'В работе', 2:'Готово'}
+    statuses = {None: "ToDo", 1: "In Work", 2: "Done"}
     # statuses = ['К выполнению', 'В работе', 'Готово']
     # Запрашиваем модель - класс State из аппликейшена tmapp
-    State = apps.get_model('tmapp', 'State')
-    
-    # В цикле создаём экземпляры класса с указанными параметрами и сохраняем их 
-    for key,value in statuses.items():
+    State = apps.get_model("tmapp", "State")
+
+    # В цикле создаём экземпляры класса с указанными параметрами и сохраняем их
+    for key, value in statuses.items():
         try:
             with transaction.atomic():
                 State.objects.create(state_title=value, parent_id=key)
@@ -23,20 +23,20 @@ def set_default_status(apps, schema_editor):
     #         with transaction.atomic():
     #             State.objects.create(state_title=element)
     #     except IntegrityError:
-    #         pass 
+    #         pass
+
 
 def delete_default_status(apps, schema_editor):
-
     # Запрашиваем модель - класс State из аппликейшена tmapp
-    State = apps.get_model('tmapp', 'State')
-    
-    # Удаляем ранее созданные экземпляры класса 
+    State = apps.get_model("tmapp", "State")
+
+    # Удаляем ранее созданные экземпляры класса
     State.objects.all().delete()
 
-class Migration(migrations.Migration):
 
+class Migration(migrations.Migration):
     dependencies = [
-        ('tmapp', '0001_initial'),
+        ("tmapp", "0001_initial"),
     ]
 
     operations = [

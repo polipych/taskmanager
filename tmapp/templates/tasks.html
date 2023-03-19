@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+<!-- {% load static %} -->
+{% block title %}Tasks{% endblock %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/tasks.css'%}">
+<div class="container">
+    <section class="panel">
+                      <table class="table table-hover p-table">
+                          <thead>
+                          <tr>
+                              <th>Task Name</th>
+                              <!-- <th>Team Member</th> -->
+                              <!-- <th>Project Progress</th> -->
+                              <th>Created</th>
+                              <th>Task Status</th>
+                              <th>Custom</th>
+                          </tr>
+                          </thead>
+                          <tbody>
+                            {% if user.is_authenticated %}
+                                {% if tasks_ %}
+                                    {% for task in tasks_ %}
+                          <tr>
+                              <td class="p-name">
+                                <small><b>{{task.title}}</b></small>
+                                  <br>
+                                  <small><a href="{% url 'taskdetails' task.id %}">{{task.keyid}}</a>: {{task.project}}</small>
+                                  <!-- <br>
+                                  <small>Created 27.11.2014</small> -->
+                              </td>
+                              <!-- <td class="p-team">
+                                  <a href="#"><img alt="image" class="" src="https://bootdey.com/img/Content/avatar/avatar1.png"></a>
+                                  <a href="#"><img alt="image" class="" src="https://bootdey.com/img/Content/avatar/avatar2.png"></a>
+                                  <a href="#"><img alt="image" class="" src="https://bootdey.com/img/Content/avatar/avatar3.png"></a>
+                              </td> -->
+                              <!-- <td class="p-progress">
+                                  <div class="progress progress-xs">
+                                      <div style="width: 87%;" class="progress-bar progress-bar-success"></div>
+                                  </div>
+                                  <small>87% Complete </small>
+                              </td> -->
+                              <td>
+                                  <small>Created {{task.task_start|date:"d.m.Y"}}</small>
+                              </td>
+                              <td>
+                                  <span {% if task.state.id == 1 %}
+                                        class="label label-default">{{task.state}}
+                                    {% elif task.state.id == 2 %}
+                                        class="label label-primary">{{task.state}}
+                                    {% elif task.state.id == 3 %}
+                                        class="label label-success">{{task.state}}
+                                    {% else %}
+                                        class="label label-warning">{{task.state}}
+                                    {% endif %}
+                                  </span>
+                              </td>
+                              <td>
+                                  <a href="{% url 'taskdetails' task.id %}" class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> View </a>
+                                  <a href="{% url 'taskedit' task.id %}" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>
+                                  <!-- <a href="{% url 'taskdelete' task.id %}" class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i> Delete </a> -->
+                                  <a href="#" class="btn btn-danger btn-xs" onclick="javascript:show_delete_alert('/task/delete/{{ task.id }}','{{csrf_token}}');">
+                                    <i class="fa fa-trash-o"></i> Delete 
+                                </a>
+                              </td>
+                          </tr>
+                          {% endfor %}
+                        {% endif %}
+                        {% endif %}
+                          </tbody>
+                      </table>
+                  </section>
+    </div>
+
+{% endblock content %}

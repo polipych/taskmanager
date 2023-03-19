@@ -25,7 +25,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = env('SECRET_KEY')
+SECRET_KEY = env("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -36,46 +36,53 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    'django.contrib.admin',
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.messages',
-    'django.contrib.staticfiles',
-    'simple_history',
-    'tmapp',
+    "django.contrib.admin",
+    "django.contrib.auth",
+    "django.contrib.contenttypes",
+    "django.contrib.sessions",
+    "django.contrib.messages",
+    "django.contrib.staticfiles",
+    "crispy_forms",
+    "crispy_bootstrap5",
+    "django_dbml",
+    "simple_history",
+    "tmapp.apps.TmAppConfig",
 ]
+
+CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
+
+CRISPY_TEMPLATE_PACK = "bootstrap5"
 
 MIDDLEWARE = [
-    'django.middleware.security.SecurityMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'simple_history.middleware.HistoryRequestMiddleware',
+    "django.middleware.security.SecurityMiddleware",
+    "django.contrib.sessions.middleware.SessionMiddleware",
+    "django.middleware.common.CommonMiddleware",
+    "django.middleware.csrf.CsrfViewMiddleware",
+    "django.contrib.auth.middleware.AuthenticationMiddleware",
+    "django.contrib.messages.middleware.MessageMiddleware",
+    "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "simple_history.middleware.HistoryRequestMiddleware",
 ]
 
-ROOT_URLCONF = 'config.urls'
+ROOT_URLCONF = "config.urls"
 
 TEMPLATES = [
     {
-        'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
-        'APP_DIRS': True,
-        'OPTIONS': {
-            'context_processors': [
-                'django.template.context_processors.debug',
-                'django.template.context_processors.request',
-                'django.contrib.auth.context_processors.auth',
-                'django.contrib.messages.context_processors.messages',
+        "BACKEND": "django.template.backends.django.DjangoTemplates",
+        "DIRS": [BASE_DIR / "templates"],
+        "APP_DIRS": True,
+        "OPTIONS": {
+            "context_processors": [
+                "django.template.context_processors.debug",
+                "django.template.context_processors.request",
+                "django.contrib.auth.context_processors.auth",
+                "django.contrib.messages.context_processors.messages",
             ],
         },
     },
 ]
 
-WSGI_APPLICATION = 'config.wsgi.application'
+WSGI_APPLICATION = "config.wsgi.application"
 
 
 # Database
@@ -89,12 +96,12 @@ WSGI_APPLICATION = 'config.wsgi.application'
 # }
 
 DATABASES = {
-'default': {
-'ENGINE': 'django.db.backends.postgresql_psycopg2',
-'NAME': env('DATABASE_NAME'),
-'USER': env('DATABASE_USER'),
-'PASSWORD': env('DATABASE_PASS'),
-}
+    "default": {
+        "ENGINE": "django.db.backends.postgresql_psycopg2",
+        "NAME": env("DATABASE_NAME"),
+        "USER": env("DATABASE_USER"),
+        "PASSWORD": env("DATABASE_PASS"),
+    }
 }
 
 
@@ -103,16 +110,16 @@ DATABASES = {
 
 AUTH_PASSWORD_VALIDATORS = [
     {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+        "NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
+        "NAME": "django.contrib.auth.password_validation.CommonPasswordValidator",
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+        "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",
     },
 ]
 
@@ -120,35 +127,105 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/4.1/topics/i18n/
 
-LANGUAGE_CODE = 'ru-ru'
+LANGUAGE_CODE = "ru-ru"
 
-TIME_ZONE = 'Europe/Moscow'
+TIME_ZONE = "Europe/Moscow"
 
 USE_I18N = True
 
-USE_TZ = True
+USE_TZ = False
 
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = "static/"
+
+STATICFILES_DIRS = [
+    BASE_DIR / "static",
+]
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
-DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 
 # Email settings
 
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = env('EMAIL_HOST')
-EMAIL_HOST_USER = env('EMAIL_HOST_USER')
-EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')
-EMAIL_PORT = env('EMAIL_PORT')
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST = env("EMAIL_HOST")
+EMAIL_HOST_USER = env("EMAIL_HOST_USER")
+EMAIL_HOST_PASSWORD = env("EMAIL_HOST_PASSWORD")
+EMAIL_PORT = env("EMAIL_PORT")
 # EMAIL_USE_TLS = env('EMAIL_USE_TLS')
-EMAIL_USE_SSL = env('EMAIL_USE_SSL')
+EMAIL_USE_SSL = env("EMAIL_USE_SSL")
 
 # Auth user settings
-AUTH_USER_MODEL = 'tmapp.User'
+AUTH_USER_MODEL = "tmapp.User"
+
+LOGIN_REDIRECT_URL = "home"
+
+LOGOUT_REDIRECT_URL = "home"
+
+# LOGGING
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "filters": {
+        "require_debug_true": {
+            "()": "django.utils.log.RequireDebugTrue",
+        }
+    },
+    "formatters": {
+        "verbose": {
+            "format": "%(levelname)s %(asctime)s %(module)s "
+            "%(process)d %(thread)d %(message)s"
+        },
+        "verbose2": {"format": "%(levelname)s >>>  %(message)s"},
+    },
+    "handlers": {
+        "console": {
+            "filters": ["require_debug_true"],
+            "class": "logging.StreamHandler",
+            "formatter": "verbose",
+        },
+        "console2": {
+            "filters": ["require_debug_true"],
+            "class": "logging.StreamHandler",
+            "formatter": "verbose2",
+        },
+    },
+    "root": {"level": "INFO", "handlers": ["console"]},
+    "loggers": {
+        # 'django.db.backends': {
+        #     'level': 'DEBUG',
+        #     'handlers': ['console'],
+        # },
+        "myLogger": {"level": "DEBUG", "handlers": ["console2"]}
+    },
+}
+
+# DRF
+# django-rest-framework - https://www.django-rest-framework.org/api-guide/settings/
+# -------------------------------------------------------------------------------
+REST_FRAMEWORK = {
+    # "DEFAULT_AUTHENTICATION_CLASSES": [
+    #     "rest_framework.authentication.TokenAuthentication",
+    #     "rest_framework.authentication.BasicAuthentication",
+    # ],
+    "DEFAULT_RENDERER_CLASSES": [
+        "rest_framework.renderers.JSONRenderer",
+    ],
+    # 'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.openapi.AutoSchema',
+    "DEFAULT_FILTER_BACKENDS": [
+        "django_filters.rest_framework.DjangoFilterBackend",
+        "rest_framework.filters.SearchFilter",
+        "rest_framework.filters.OrderingFilter",
+    ],
+    "TEST_REQUEST_DEFAULT_FORMAT": "json",
+    # "DEFAULT_PAGINATION_CLASS": "taskapp.pagination.BasePageNumberPagination",
+    # "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.LimitOffsetPagination",
+    "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
+    "PAGE_SIZE": 5,
+}

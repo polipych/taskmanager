@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %} 
+{% block content %}
+
+<!--Add Sprint--> 
+<div class="container py-5">
+	<h1>Add Sprint</h1>
+	<form method="POST">
+		{% csrf_token %}
+        {{ form | crispy }}      
+		<button class="btn btn-primary" type="submit">Add Sprint</button>
+	</form>
+</div>
+{% endblock content %}
