@@ -44,7 +44,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "crispy_forms",
     "crispy_bootstrap5",
-    "django_dbml",
+    # "django_dbml",
     "simple_history",
     "tmapp.apps.TmAppConfig",
 ]
